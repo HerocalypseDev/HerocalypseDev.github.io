@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}</style>
+<title>HeroDev Discord Bots</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single centered column, hero with logo + terminal-style command preview, sections stacked */
+:root {
+  --bg: #F6F0E6; --surface: #FBF7F0; --line: #E3D8C6;
+  --fg: #2B1E14; --muted: #7A6553; --accent: #8B5E3C; --accent-soft: #8B5E3C1A; --on-accent: #FBF7F0;
+  --display: "DM Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+  --body: "DM Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono: "DM Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1E1712; --surface: #2A2019; --line: #3D3027;
+  --fg: #F3EADC; --muted: #B8A48F; --accent: #C89B72; --accent-soft: #C89B7222; --on-accent: #1E1712; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #1E1712; --surface: #2A2019; --line: #3D3027;
+  --fg: #F3EADC; --muted: #B8A48F; --accent: #C89B72; --accent-soft: #C89B7222; --on-accent: #1E1712; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 16px/1.65 var(--body); }
+.wrap { max-width: 1040px; margin: 0 auto; padding-block: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+a { color: var(--accent); }
+a:focus-visible, .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.1; text-wrap: balance; margin: 0; }
+h2 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 600; letter-spacing: -0.02em; }
+h3 { font-size: 1.1rem; font-weight: 600; }
+p { margin: 0; }
+.eyebrow { font: 600 0.75rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+section { display: grid; gap: 28px; padding-block: 64px; border-top: 1px solid var(--line); }
+
+nav { display: flex; justify-content: space-between; align-items: center; padding-block: 22px; }
+.brand { display: flex; align-items: center; gap: 10px; font: 700 1.2rem var(--display); color: var(--fg); text-decoration: none; }
+.brand b { color: var(--accent); font-weight: 700; }
+
+.hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; padding-block: 48px 72px; }
+.hero > * { min-width: 0; }
+.hero h1 { font-size: clamp(2.4rem, 6vw, 3.8rem); font-weight: 600; letter-spacing: -0.03em; margin-block: 14px 18px; }
+.hero h1 span { color: var(--accent); }
+.lead { color: var(--muted); font-size: 1.1rem; max-width: 34em; }
+.ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.btn { display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; text-decoration: none; border: 1px solid var(--accent); }
+.btn.primary { background: var(--accent); color: var(--on-accent); }
+.btn.ghost { color: var(--fg); border-color: var(--line); }
+
+.term { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; font: 0.9rem/1.6 var(--mono); }
+.term-bar { display: flex; gap: 8px; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 0.75rem; }
+.term-bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+.term-body { padding: 18px; display: grid; gap: 10px; overflow-x: auto; }
+.cmd { color: var(--accent); font-weight: 600; }
+.out { border-left: 3px solid var(--accent); padding-left: 12px; color: var(--fg); }
+.out small { color: var(--muted); }
+.note { color: var(--muted); font-size: 0.75rem; }
+
+.langs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.lang { padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px; display: grid; gap: 4px; }
+.lang strong { font-family: var(--display); font-size: 1.05rem; }
+.lang code { font: 0.8rem var(--mono); color: var(--muted); }
+
+.services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.services > div { display: grid; gap: 10px; align-content: start; }
+.services ul { margin: 0; padding-left: 18px; color: var(--muted); display: grid; gap: 6px; }
+
+.project { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.project > * { min-width: 0; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag { font: 0.75rem var(--mono); padding: 4px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.feat { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.feat li { display: grid; gap: 2px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.feat li span { color: var(--muted); font-size: 0.95rem; }
+
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; gap: 8px; align-content: start; }
+.steps li::before { content: "0" counter(s); font: 600 0.85rem var(--mono); color: var(--accent); }
+.steps p { color: var(--muted); font-size: 0.95rem; }
+
+.faq { display: grid; gap: 10px; max-width: 760px; }
+details { border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; }
+summary { cursor: pointer; font-weight: 700; }
+details p { color: var(--muted); margin-top: 8px; }
+
+.contact { text-align: left; }
+.contact p { color: var(--muted); max-width: 36em; }
+footer { padding-block: 28px; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--line); }
+
+@media (max-width: 820px) {
+  .hero, .project { grid-template-columns: 1fr; gap: 32px; }
+  .services { grid-template-columns: 1fr; gap: 28px; }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .langs { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 440px) {
+  .steps, .langs { grid-template-columns: 1fr; }
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="brand" href="#top" aria-label="HeroDev home">
+      <svg width="34" height="34" viewBox="0 0 800 800" aria-hidden="true">
+        <rect width="800" height="800" rx="180" fill="var(--accent-soft)"/>
+        <g fill="none" stroke="var(--fg)" stroke-width="40" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="400" y1="210" x2="400" y2="270"/>
+          <rect x="220" y="270" width="360" height="290" rx="85"/>
+          <line x1="160" y1="380" x2="160" y2="450"/>
+          <line x1="640" y1="380" x2="640" y2="450"/>
+        </g>
+        <circle cx="400" cy="190" r="30" fill="var(--accent)"/>
+        <rect x="300" y="385" width="66" height="44" rx="22" fill="var(--accent)"/>
+        <rect x="434" y="385" width="66" height="44" rx="22" fill="var(--accent)"/>
+      </svg>
+      <span>Hero<b>Dev</b></span>
+    </a>
+    <a class="btn ghost" href="#contact">Hire me</a>
+  </nav>
+
+  <header class="hero" id="top">
+    <div>
+      <p class="eyebrow">Discord bot developer</p>
+      <h1>Custom Discord bots, <span>built and hosted</span> for your server.</h1>
+      <p class="lead">I design, code and run bots that fit how your community actually works. Moderation, leveling, tickets, games and integrations, in the language you need, kept online 24/7.</p>
+      <div class="ctas">
+        <a class="btn primary" href="#contact">Start a project</a>
+        <a class="btn ghost" href="#work">See my work</a>
+      </div>
+    </div>
+    <div class="term" role="img" aria-label="Example slash command output from a HeroDev bot">
+      <div class="term-bar"><i></i><i></i><i></i>&nbsp;#general</div>
+      <div class="term-body">
+        <div><span class="cmd">/me</span></div>
+        <div class="out">Level 7 · 1,240 XP<br><small>Daily XP cap hit 4 days in a row</small></div>
+        <div><span class="cmd">/ticket open</span> <span class="note">reason: billing</span></div>
+        <div class="out">Ticket #0142 created<br><small>Staff have been notified</small></div>
+        <div class="note">Example output</div>
+      </div>
+    </div>
+  </header>
+
+  <section id="languages">
+    <p class="eyebrow">Languages</p>
+    <h2>Any stack. Your existing code or a fresh start.</h2>
+    <div class="langs">
+      <div class="lang"><strong>Python</strong><code>discord.py</code></div>
+      <div class="lang"><strong>JavaScript / TypeScript</strong><code>discord.js</code></div>
+      <div class="lang"><strong>Java</strong><code>JDA</code></div>
+      <div class="lang"><strong>C#</strong><code>Discord.Net</code></div>
+      <div class="lang"><strong>Go</strong><code>discordgo</code></div>
+      <div class="lang"><strong>Rust</strong><code>serenity</code></div>
+    </div>
+  </section>
+
+  <section id="services">
+    <p class="eyebrow">Services</p>
+    <h2>What I do</h2>
+    <div class="services">
+      <div>
+        <h3>Build</h3>
+        <ul>
+          <li>Moderation, auto-mod, anti-spam and anti-raid</li>
+          <li>Leveling, XP, economy and leaderboards</li>
+          <li>Tickets, verification, welcome messages</li>
+          <li>Reaction and button roles, polls, giveaways</li>
+          <li>Twitch, YouTube and Reddit alerts, custom APIs</li>
+          <li>Slash commands, buttons, menus and forms</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Host and manage</h3>
+        <ul>
+          <li>24/7 hosting with automatic restarts</li>
+          <li>Uptime monitoring and error logs</li>
+          <li>Regular database backups</li>
+          <li>Updates when Discord changes its API</li>
+          <li>New features as your server grows</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Fix and upgrade</h3>
+        <ul>
+          <li>Repair bots that stopped working</li>
+          <li>Move old prefix commands to slash commands</li>
+          <li>Rewrite a bot in another language</li>
+          <li>Move a bot from a laptop to proper hosting</li>
+          <li>Databases: SQLite, PostgreSQL, MongoDB</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="work">
+    <p class="eyebrow">Featured project</p>
+    <div class="project">
+      <div style="display:grid;gap:16px">
+        <h2>Community XP bot</h2>
+        <p class="lead">A live bot running 24/7 for an active Discord community. It tracks member activity, keeps people coming back with daily goals and shows each member their progress.</p>
+        <div class="tags">
+          <span class="tag">Python</span><span class="tag">discord.py</span><span class="tag">SQLite</span><span class="tag">pytest</span><span class="tag">v2.1.0</span>
+        </div>
+      </div>
+      <ul class="feat">
+        <li><strong>XP and leveling</strong><span>Members earn XP for activity, with a daily cap to stop farming.</span></li>
+        <li><strong>Cap streaks</strong><span>Tracks how many days in a row a member reached the daily cap.</span></li>
+        <li><strong>Daily reminders</strong><span>Pings members still under the cap in the XP channel at 01:00 UTC.</span></li>
+        <li><strong>/me and /dashboard</strong><span>Personal stats and a server overview, one command away.</span></li>
+        <li><strong>Tested releases</strong><span>Every update is versioned, tested and tracked in git.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="process">
+    <p class="eyebrow">How it works</p>
+    <h2>From idea to a running bot</h2>
+    <ol class="steps">
+      <li><h3>Tell me the idea</h3><p>Send me what your server needs, even if it is just a rough list.</p></li>
+      <li><h3>Get a quote</h3><p>I reply with a clear scope, price and timeline before any work starts.</p></li>
+      <li><h3>Build and test</h3><p>I build it on a test server and you try every feature before launch.</p></li>
+      <li><h3>Launch and host</h3><p>The bot goes live and I keep it running, updated and backed up.</p></li>
+    </ol>
+  </section>
+
+  <section id="faq">
+    <p class="eyebrow">Questions</p>
+    <h2>Before you order</h2>
+    <div class="faq">
+      <details><summary>Do you need my Discord login?</summary><p>No. You create the bot in the Discord Developer Portal and share only the bot token. I never ask for your account password.</p></details>
+      <details><summary>Who pays for hosting?</summary><p>Either option works. I can include hosting in a monthly plan, or you pay for your own hosting panel and I manage it.</p></details>
+      <details><summary>Do I get the source code?</summary><p>Yes, if your order includes it. You own your bot and can move it anytime.</p></details>
+      <details><summary>Can you fix a bot someone else made?</summary><p>Yes. Send me the code or a description of what broke and I will tell you what it takes.</p></details>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <p class="eyebrow">Contact</p>
+    <h2>Have a bot in mind?</h2>
+    <p>Message me on Fiverr with what your server needs. I usually reply within a day with questions or a quote.</p>
+    <div class="ctas" style="margin-top:0">
+      <a class="btn primary" href="https://www.fiverr.com/" target="_blank" rel="noopener">Message me on Fiverr</a>
+    </div>
+  </section>
+
+  <footer>© 2026 HeroDev · Discord bot development and hosting</footer>
+</div>
+
+</body>
+</html>
